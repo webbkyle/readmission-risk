@@ -47,7 +47,9 @@ jobs:
           ls data/synthea-new/fhir | wc -l
 
       - name: Run weekly loop
-        run: python scripts/weekly_run.py --new-bundles data/synthea-new/fhir --version v$(date +%Y-%m-%d) --min-new-patients 75
+        # version includes the run number: two runs on the same day (e.g. a
+        # manual re-run) must not share a version string
+        run: python scripts/weekly_run.py --new-bundles data/synthea-new/fhir --version v$(date +%Y-%m-%d)-r${{ github.run_number }} --min-new-patients 75
 
       - name: Rebuild static Space assets
         run: |
