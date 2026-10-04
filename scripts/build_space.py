@@ -3,7 +3,7 @@
 
 Generates (into space/):
   model.onnx, model_meta.json   via export_onnx.py
-  patients.json                 one record per patient (most recent discharge)
+  patients.json                 one record per discharge (2,108 labeled rows)
   feature_info.json              display names + LightGBM gain importances
   metrics.json                   copy of data/metrics.json (fallback; the page
                                  prefers the live file from GitHub)
@@ -62,19 +62,22 @@ def main():
         'medians': display_medians,
     }, open(os.path.join(SPACE, 'feature_info.json'), 'w'))
 
-    df = df.sort_values('discharge_date').groupby('patient_id').tail(1)
+    df = df.sort_values('discharge_date')
+    pmap = {pid: 'P%03d' % (i + 1) for i, pid in enumerate(df['patient_id'].unique())}
     patients = []
     for k, r in enumerate(df.itertuples()):
+        d = r._asdict()
         patients.append({
-            'id': 'P%03d' % (k + 1),
+            'id': 'D%04d' % (k + 1),
+            'plabel': '%s · %s' % (pmap[d['patient_id']], str(d['discharge_date'])[:10]),
             'age': int(r.age), 'male': int(r.sex_male),
             'discharge_date': str(r.discharge_date),
-            'features': [None if pd.isna(r._asdict()[f]) else round(float(r._asdict()[f]), 3)
+            'features': [None if pd.isna(d[f]) else round(float(d[f]), 3)
                          for f in feats],
             'readmitted': int(r.readmit_30d),
         })
     json.dump(patients, open(os.path.join(SPACE, 'patients.json'), 'w'))
-    print('patients: %d' % len(patients))
+    print('discharges: %d' % len(patients))
 
     status = json.load(open(os.path.join(ROOT, 'data', 'metrics.json')))
     json.dump(status, open(os.path.join(SPACE, 'metrics.json'), 'w'))

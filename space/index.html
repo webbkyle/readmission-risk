@@ -11,8 +11,8 @@
 <header>
   <div class="wrap">
     <h1>30-Day Readmission Risk</h1>
-    <p class="sub">A production-style ML demo: pick a <strong>synthetic</strong> patient, and the model
-      scores their readmission risk <strong>live in your browser</strong> — no data leaves your machine.</p>
+    <p class="sub">A production-style ML demo: pick a <strong>synthetic</strong> hospital discharge, and the model
+      scores its 30-day readmission risk <strong>live in your browser</strong> — no data leaves your machine.</p>
     <p class="links">
       <a href="https://github.com/webbkyle/readmission-risk">GitHub repo</a> ·
       <a href="https://webbkyle.github.io/mini-projects/">Mini Project Space</a>
@@ -25,12 +25,12 @@
 <main class="wrap grid">
   <section class="card patients">
     <div class="row">
-      <h2>Patients</h2>
-      <button id="random" title="pick a random patient">🎲 random</button>
+      <h2>Discharges</h2>
+      <button id="random" title="pick a random discharge">🎲 random</button>
     </div>
-    <input id="search" type="search" placeholder="filter by id or age…" autocomplete="off">
+    <input id="search" type="search" placeholder="filter by id, patient, date, or age…" autocomplete="off">
     <div id="plist" class="plist"></div>
-    <p class="hint">283 synthetic patients · most recent inpatient discharge each</p>
+    <p class="hint">2,108 synthetic discharges · each scored for 30-day readmission risk</p>
   </section>
 
   <section class="card score">

@@ -23,6 +23,7 @@ async function init() {
   document.getElementById('search').addEventListener('input', e => renderList(e.target.value));
   document.getElementById('random').addEventListener('click', () =>
     select(PATIENTS[Math.floor(Math.random() * PATIENTS.length)].id));
+  document.getElementById('random').title = 'pick a random discharge';
   renderList('');
   loadStatus();
   renderModelCard();
@@ -34,10 +35,10 @@ function renderList(q) {
   const box = document.getElementById('plist');
   box.innerHTML = '';
   const hits = PATIENTS.filter(p =>
-    !q || p.id.toLowerCase().includes(q) || String(p.age) === q);
+    !q || p.id.toLowerCase().includes(q) || p.plabel.toLowerCase().includes(q) || String(p.age) === q);
   for (const p of hits.slice(0, 400)) {
     const b = document.createElement('button');
-    b.textContent = `${p.id} · age ${p.age} · ${p.male ? 'M' : 'F'}`;
+    b.textContent = `${p.id} · ${p.plabel} · age ${p.age}`;
     b.dataset.pid = p.id;
     b.onclick = () => select(p.id);
     box.appendChild(b);
@@ -67,9 +68,9 @@ async function select(pid) {
   const p = PATIENTS.find(x => x.id === pid);
   document.querySelectorAll('#plist button').forEach(b =>
     b.classList.toggle('active', b.dataset.pid === pid));
-  document.getElementById('pname').textContent = `Patient ${p.id}`;
+  document.getElementById('pname').textContent = `Discharge ${p.id}`;
   document.getElementById('pfacts').textContent =
-    `Age ${p.age} · ${p.male ? 'Male' : 'Female'} · last discharge ${p.discharge_date.slice(0, 10)}`;
+    `${p.plabel} · Age ${p.age} · ${p.male ? 'Male' : 'Female'}`;
   const t0 = performance.now();
   const proba = await score(p);
   const ms = Math.round(performance.now() - t0);
@@ -100,7 +101,7 @@ async function select(pid) {
   document.getElementById('outcome').innerHTML =
     `Readmitted within 30 days: <span class="pill ${p.readmitted ? 'yes' : 'no'}">${p.readmitted ? 'Yes' : 'No'}</span>` +
     ` &nbsp;·&nbsp; at a 30% flag threshold the model would have been ` +
-    `<span class="pill ${hit ? 'hit' : 'miss'}">${hit ? 'right' : 'wrong'}</span> on this patient.`;
+    `<span class="pill ${hit ? 'hit' : 'miss'}">${hit ? 'right' : 'wrong'}</span> on this discharge.`;
 }
 
 function renderModelCard() {
