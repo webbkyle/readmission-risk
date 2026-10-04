@@ -1,0 +1,6 @@
+data/synthea/
+data/synthea-new/
+data/*.zip
+__pycache__/
+.venv/
+*.pyc
