@@ -54,13 +54,14 @@ def main():
     model = joblib.load(os.path.join(ROOT, 'models', 'model_%s.pkl' % args.version))
     gains = model.booster_.feature_importance(importance_type='gain')
     order = np.argsort(gains)[::-1]
+    df = pd.read_parquet(os.path.join(ROOT, 'data', 'features.parquet'))
+    display_medians = df[feats].median().to_dict()
     json.dump({
         'display': {f: DISPLAY.get(f, f) for f in feats},
         'importance': [{'feature': feats[i], 'gain': float(gains[i])} for i in order],
-        'medians': meta['medians'],
+        'medians': display_medians,
     }, open(os.path.join(SPACE, 'feature_info.json'), 'w'))
 
-    df = pd.read_parquet(os.path.join(ROOT, 'data', 'features.parquet'))
     df = df.sort_values('discharge_date').groupby('patient_id').tail(1)
     patients = []
     for k, r in enumerate(df.itertuples()):

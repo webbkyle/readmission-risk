@@ -44,12 +44,14 @@ function renderList(q) {
   }
 }
 
-function impute(feats) {
-  return feats.map((v, i) => v == null ? META.medians[META.features[i]] : v);
+/* missing values pass through as NaN -- the model was trained with LightGBM's
+   native NaN handling, and the ONNX graph replicates it exactly */
+function toInput(feats) {
+  return feats.map(v => v == null ? NaN : v);
 }
 
 async function score(p) {
-  const x = new Float32Array(impute(p.features));
+  const x = new Float32Array(toInput(p.features));
   const t = new ort.Tensor('float32', x, [1, META.features.length]);
   const out = await session.run({ input: t });
   return out.probabilities.data[1];
@@ -88,7 +90,7 @@ async function select(pid) {
     div.className = 'factor';
     div.innerHTML =
       `<span><strong>${FINFO.display[f]}</strong></span>` +
-      `<span class="vals">patient: ${fmt(f, p.features[i])} &nbsp;·&nbsp; median: ${fmt(f, META.medians[f])}</span>` +
+      `<span class="vals">patient: ${fmt(f, p.features[i])} &nbsp;·&nbsp; median: ${fmt(f, FINFO.medians[f])}</span>` +
       `<span class="bar"><i style="width:${(100 * imp.gain / maxGain).toFixed(1)}%"></i></span>`;
     box.appendChild(div);
   }
