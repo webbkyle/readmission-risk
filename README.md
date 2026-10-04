@@ -2,7 +2,7 @@
 
 30-day hospital readmission prediction, built as a **production ML system** —
 not just a model. FHIR-native feature engineering, a deployed FastAPI service,
-drift monitoring, and a monthly champion/challenger retraining loop.
+drift monitoring, and a weekly champion/challenger retraining loop.
 
 > **Honest framing:** everything here trains on [Synthea](https://github.com/synthetichealth/synthea)
 > synthetic patients (~1,180 FHIR R4 bundles). No PHI, no data-use agreement, fully
@@ -21,7 +21,7 @@ src/train.py ──▶ models/model_<ver>.pkl ──▶ app/main.py (FastAPI + D
    │                        │               (production serving layer)
    │                        ▼
    │                   ┌─────────────┐
-   │                   │  monthly    │
+   │                   │  weekly     │
    └──────────────────▶│  retrain    │
    frozen holdout ──▶  │  (champion/ │
    promotion gate ──▶  │  challenger)│──▶ space/ ──▶ Hugging Face (static)
@@ -65,10 +65,10 @@ curl -X POST localhost:8000/predict -H 'Content-Type: application/json' \
 
 ## The update loop
 
-- **Monthly retrain** (`scripts/monthly_run.py`, scheduled in CI): generates a
+- **Weekly retrain** (`scripts/weekly_run.py`, scheduled in CI): generates a
   fresh synthetic cohort (new seed = simulated arrivals), retrains a challenger
   on all non-holdout patients, and promotes it only if holdout AUC clears the
-  champion minus a 0.01 gate. Skips when fewer than 100 new patients arrive.
+  champion minus a 0.01 gate. Skips when fewer than 75 new patients arrive.
   Every run writes `runs/manifest_<ver>.json`.
 - **Weekly drift check** (`scripts/monitor.py`): polls the API's `/metrics`
   endpoint and computes PSI of the served prediction distribution against the

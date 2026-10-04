@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Monthly champion/challenger retraining loop.
+"""Weekly champion/challenger retraining loop.
 
 1. Builds features for a NEW cohort of FHIR bundles (--new-bundles).
 2. Skips retraining if fewer than --min-new-patients new patients arrived.
@@ -10,12 +10,12 @@
    (the feed behind the write-up's live status panel).
 
 In CI, the new cohort is generated with Synthea (see
-.github/workflows/monthly-retrain.yml). Pushing the promoted artifact to
+.github/workflows/weekly-retrain.yml). Pushing the promoted artifact to
 Hugging Face Spaces happens in CI via the HF API (needs HF_TOKEN secret).
 
 Usage:
-  python scripts/monthly_run.py --new-bundles data/synthea-new/fhir \
-      --version v2026-11 [--gate 0.01] [--min-new-patients 100] [--dry-run]
+  python scripts/weekly_run.py --new-bundles data/synthea-new/fhir \
+      --version v2026-10-05 [--gate 0.01] [--min-new-patients 75] [--dry-run]
 """
 import argparse, glob, json, os, subprocess, sys
 from datetime import date

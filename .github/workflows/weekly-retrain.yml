@@ -1,13 +1,13 @@
-name: monthly-retrain
+name: weekly-retrain
 
-# Monthly champion/challenger retraining. Simulates new arrivals by generating
+# Weekly champion/challenger retraining. Simulates new arrivals by generating
 # a fresh synthetic cohort (new Synthea seed), retrains, promotes only on a
 # frozen-holdout gate, rebuilds the static Space (in-browser ONNX demo),
 # pushes it to Hugging Face, and commits the updated metrics.json (the
 # write-up's live status feed).
 on:
   schedule:
-    - cron: '0 9 1 * *'  # 09:00 UTC on the 1st of each month
+    - cron: '0 9 * * 1'  # 09:00 UTC every Monday
   workflow_dispatch:      # manual trigger for demos
 
 jobs:
@@ -38,13 +38,13 @@ jobs:
       - name: Generate new cohort (fresh seed = simulated arrivals)
         run: |
           mkdir -p data/synthea-new
-          java -jar /tmp/synthea.jar -p 300 -s ${{ github.run_number }} \
+          java -jar /tmp/synthea.jar -p 500 -s ${{ github.run_number }} \
             --exporter.baseDirectory=data/synthea-new \
             --exporter.fhir.export=true
           ls data/synthea-new/fhir | wc -l
 
-      - name: Run monthly loop
-        run: python scripts/monthly_run.py --new-bundles data/synthea-new/fhir --version v$(date +%Y-%m)
+      - name: Run weekly loop
+        run: python scripts/weekly_run.py --new-bundles data/synthea-new/fhir --version v$(date +%Y-%m-%d) --min-new-patients 75
 
       - name: Rebuild static Space assets
         run: |
@@ -67,7 +67,7 @@ jobs:
               folder_path='space',
               repo_id='k-webb/readmission-risk',
               repo_type='space',
-              commit_message='monthly run %s: champion %s' % (
+              commit_message='weekly run %s: champion %s' % (
                   status['last_run'], status['champion_version']),
           )
           print('space updated')
@@ -78,5 +78,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/metrics.json data/features.parquet runs/ models/ space/
-          git diff --cached --quiet || git commit -m "monthly run $(date +%Y-%m): $(python -c "import json;print(json.load(open('data/metrics.json'))['last_outcome'])")"
+          git diff --cached --quiet || git commit -m "weekly run $(date +%Y-%m-%d): $(python -c "import json;print(json.load(open('data/metrics.json'))['last_outcome'])")"
           git push
