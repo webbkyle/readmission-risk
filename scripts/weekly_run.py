@@ -15,7 +15,10 @@ Hugging Face Spaces happens in CI via the HF API (needs HF_TOKEN secret).
 
 Usage:
   python scripts/weekly_run.py --new-bundles data/synthea-new/fhir \
-      --version v2026-10-05 [--gate 0.01] [--min-new-patients 75] [--dry-run]
+      --version v2026-10-05-r37224725536 [--gate 0.01] [--min-new-patients 75] [--dry-run]
+
+Version strings must be unique per run: CI appends the GitHub run number
+(vYYYY-MM-DD-rNNNN) so a same-day re-run never collides with an earlier run.
 """
 import argparse, glob, json, os, subprocess, sys
 from datetime import date
@@ -45,6 +48,12 @@ def main():
     status = load_status()
     champion_version = status['champion_version']
     print('champion: %s' % champion_version)
+
+    # fail fast on version collision: never silently overwrite a prior run
+    for p in [os.path.join(ROOT, 'models', 'model_%s.pkl' % args.version),
+              os.path.join(ROOT, 'runs', 'manifest_%s.json' % args.version)]:
+        if os.path.exists(p):
+            raise SystemExit('version collision: %s already exists -- use a unique --version' % p)
 
     # ---- 1-2. featurize new cohort, check volume gate ----
     files = sorted(glob.glob(os.path.join(args.new_bundles, '*.json')))
