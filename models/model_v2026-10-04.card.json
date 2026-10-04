@@ -33,41 +33,41 @@
   "dropped_zero_variance": [
     "flag_copd"
   ],
-  "n_train_rows": 2307,
-  "n_train_patients": 451,
+  "n_train_rows": 2937,
+  "n_train_patients": 698,
   "n_holdout_rows": 498,
   "n_holdout_patients": 57,
-  "train_positive_rate": 0.2895535327264846,
-  "data_sha": "14936afda65d",
+  "train_positive_rate": 0.24276472591079332,
+  "data_sha": "1e8fe0288537",
   "seed": 42,
   "metrics_holdout": {
     "logistic_regression": {
-      "auc": 0.8844086021505377,
-      "avg_precision": 0.7111114803744685,
-      "brier": 0.11429807570150778,
+      "auc": 0.8906169994879671,
+      "avg_precision": 0.7241133285717103,
+      "brier": 0.11226304649931869,
       "n": 498,
       "positive_rate": 0.25301204819277107
     },
-    "lightgbm_cv_auc_mean": 0.8565265154340638,
-    "lightgbm_cv_auc_std": 0.02443495363080234,
+    "lightgbm_cv_auc_mean": 0.864638372601948,
+    "lightgbm_cv_auc_std": 0.019567442159591015,
     "lightgbm": {
-      "auc": 0.9169440177504695,
-      "avg_precision": 0.7533880917035648,
-      "brier": 0.10880039966488673,
+      "auc": 0.9340971155487284,
+      "avg_precision": 0.8093867978468593,
+      "brier": 0.09726309022760722,
       "n": 498,
       "positive_rate": 0.25301204819277107
     },
     "top_features": [
       "days_since_last_discharge",
-      "n_meds",
-      "n_imp_all",
-      "sodium",
       "egfr",
-      "n_proc_12m",
-      "age",
-      "potassium",
+      "n_meds",
       "los_days",
-      "creatinine"
+      "sodium",
+      "n_proc_12m",
+      "n_imp_all",
+      "glucose",
+      "age",
+      "potassium"
     ]
   }
 }
