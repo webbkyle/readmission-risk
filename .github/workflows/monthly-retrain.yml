@@ -60,7 +60,7 @@ jobs:
           for f in [f'models/model_{ver}.pkl', f'models/model_{ver}.card.json']:
               api.upload_file(path_or_fileobj=f,
                               path_in_repo=os.path.basename(f),
-                              repo_id='webbkyle/readmission-risk',
+                              repo_id='k-webb/readmission-risk',
                               repo_type='space')
           print('pushed', ver, 'to Space')
           EOF
