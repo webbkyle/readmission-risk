@@ -1,12 +1,12 @@
 {
-  "champion_version": "v2026-10-04",
-  "trained_on": "2026-10-04",
-  "n_train_patients": 698,
-  "n_train_rows": 2937,
-  "holdout_auc": 0.9341,
-  "holdout_avg_precision": 0.8094,
-  "last_run": "2026-10-04",
-  "last_outcome": "PROMOTED v2026-10-04 (holdout AUC 0.9341 >= 0.9305 - gate 0.010)",
+  "champion_version": "v2026-10-05-r5",
+  "trained_on": "2026-10-05",
+  "n_train_patients": 959,
+  "n_train_rows": 3581,
+  "holdout_auc": 0.928,
+  "holdout_avg_precision": 0.7978,
+  "last_run": "2026-10-05",
+  "last_outcome": "PROMOTED v2026-10-05-r5 (holdout AUC 0.9280 >= 0.9341 - gate 0.010)",
   "drift": {
     "status": "first run",
     "max_psi": null
@@ -29,6 +29,12 @@
       "event": "promoted",
       "version": "v2026-10-04",
       "holdout_auc": 0.9341
+    },
+    {
+      "date": "2026-10-05",
+      "event": "promoted",
+      "version": "v2026-10-05-r5",
+      "holdout_auc": 0.928
     }
   ]
 }
