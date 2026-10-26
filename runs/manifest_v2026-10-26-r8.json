@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-26",
+  "challenger_version": "v2026-10-26-r8",
+  "champion_version": "v2026-10-12-r6",
+  "challenger_holdout_auc": 0.918800136542072,
+  "champion_holdout_auc": 0.924795186891961,
+  "gate": 0.01,
+  "promoted": true,
+  "n_new_patients": 237,
+  "n_train_rows": 4645
+}
