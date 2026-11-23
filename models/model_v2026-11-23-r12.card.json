@@ -1,0 +1,73 @@
+{
+  "version": "v2026-11-23-r12",
+  "model": "lightgbm",
+  "trained_on": "2026-11-23",
+  "features": [
+    "age",
+    "sex_male",
+    "los_days",
+    "n_imp_12m",
+    "n_ed_12m",
+    "n_amb_12m",
+    "n_imp_all",
+    "days_since_last_discharge",
+    "n_conditions",
+    "n_meds",
+    "n_proc_12m",
+    "flag_diabetes",
+    "flag_hypertension",
+    "flag_heart_failure",
+    "flag_ckd",
+    "flag_depression",
+    "flag_obesity",
+    "bmi",
+    "sbp",
+    "dbp",
+    "hba1c",
+    "glucose",
+    "creatinine",
+    "egfr",
+    "sodium",
+    "potassium"
+  ],
+  "dropped_zero_variance": [
+    "flag_copd"
+  ],
+  "n_train_rows": 7628,
+  "n_train_patients": 2352,
+  "n_holdout_rows": 498,
+  "n_holdout_patients": 57,
+  "train_positive_rate": 0.1786837965390666,
+  "data_sha": "496e2de3bda0",
+  "seed": 42,
+  "metrics_holdout": {
+    "logistic_regression": {
+      "auc": 0.8708397337429596,
+      "avg_precision": 0.6742657884575245,
+      "brier": 0.12309511182220531,
+      "n": 498,
+      "positive_rate": 0.25301204819277107
+    },
+    "lightgbm_cv_auc_mean": 0.8669160256593761,
+    "lightgbm_cv_auc_std": 0.015820481492370204,
+    "lightgbm": {
+      "auc": 0.9281447345963476,
+      "avg_precision": 0.7948439266727451,
+      "brier": 0.09409749900177541,
+      "n": 498,
+      "positive_rate": 0.25301204819277107
+    },
+    "top_features": [
+      "days_since_last_discharge",
+      "age",
+      "los_days",
+      "egfr",
+      "n_meds",
+      "n_proc_12m",
+      "sodium",
+      "creatinine",
+      "potassium",
+      "n_imp_all"
+    ]
+  }
+}
